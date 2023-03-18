@@ -1,0 +1,14 @@
+{:paths ["src" "resources"]
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        org.clojure/tools.logging {:mvn/version "1.2.4"}
+        metosin/reitit-core {:mvn/version "0.6.0"}
+        metosin/reitit-ring {:mvn/version "0.6.0"}
+        specql/specql {:git/url "https://github.com/tatut/specql.git"
+                       :sha "f8caf1eeedbe968c23fc90d35f21739cddcc36ca"}
+        org.postgresql/postgresql {:mvn/version "42.5.4"}
+        http-kit/http-kit {:mvn/version "2.5.3"}
+        tatut/ripley {:local/root "../ripley"}
+        #_{:git/url "https://github.com/tatut/ripley.git"
+           :sha "e33818ae6f93b2000d6b31929325070176048f65"}
+        }
+ :aliases {:dev {:extra-paths ["dev-src"]}}}
