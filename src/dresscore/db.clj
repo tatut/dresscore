@@ -84,10 +84,10 @@
   :ok)
 
 ;; PENDING: having trouble on cljs side
-(specql/define-tables {:specql.core/schema-file "dresscore-schema.edn"}
+(specql/define-tables db-config #_{:specql.core/schema-file "dresscore-schema.edn"}
   ["program_part" :ds/program-part]
   ["program" :ds/program]
-  ["score" :ds/score-type]
+  ["score" :ds/score-type {"part_id" :ds/part-id}]
   ["person" :ds/person {"is_rider" :ds/rider?
                         "is_judge" :ds/judge?}]
   ["horse" :ds/horse]
@@ -98,7 +98,18 @@
                           :ds/program (rel/has-one :ds/program-id :ds/program :ds/id)
                           :ds/rider (rel/has-one :ds/rider-id :ds/person :ds/id)
                           :ds/horse (rel/has-one :ds/horse-id :ds/horse :ds/id)
-                          :ds/judge (rel/has-one :ds/judge-id :ds/person :ds/id)}])
+                          :ds/judge (rel/has-one :ds/judge-id :ds/person :ds/id)}]
+
+  ["percentages" :ds/percentages {"program_id" :ds/program-id
+                                  "judge_id" :ds/judge-id
+                                  "rider_id" :ds/rider-id
+                                  "horse_id" :ds/horse-id
+                                  "max_points" :ds/max-points
+                                  :ds/program (rel/has-one :ds/program-id :ds/program :ds/id)
+                                  :ds/rider (rel/has-one :ds/rider-id :ds/person :ds/id)
+                                  :ds/horse (rel/has-one :ds/horse-id :ds/horse :ds/id)
+                                  :ds/judge (rel/has-one :ds/judge-id :ds/person :ds/id)} ]
+  )
 
 (defn sync-programs! [db]
   (let [programs (-> "programs.edn" io/resource slurp read-string)]
@@ -137,7 +148,7 @@
   (specql/insert! db-config :ds/person #:ds {:name "Dredd" :judge? true})
   (specql/insert! db-config :ds/scoring
                   {:ds/program-id (program-ref db-config "Helppo A")
-                   :ds/scores [{:ds/part 1 :ds/score 42}]
+                   :ds/scores [{:ds/part-id 1 :ds/score 42}]
                    :ds/date (java.util.Date.)
                    :ds/horse-id (horse-ref db-config "Flex")
                    :ds/rider-id (person-ref db-config "Headless Rider")
