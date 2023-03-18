@@ -22,5 +22,5 @@
                                                           {:middleware [db/wrap-db]})
                                        http-config))))
 
-(defn main [& _args]
+(defn -main [& _args]
   (start))
